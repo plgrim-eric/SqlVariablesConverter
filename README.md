@@ -29,6 +29,7 @@ SQL 변수 형식을 Mybatis와 일반 SQL 형식 간에 상호 변환해주는 
    - Windows: `Sublime Text 설치폴더\Data\Packages`
 2. 이 저장소를 `SqlVariablesConverter` 폴더로 클론하거나 다운로드
 
-## 라이선스
+## Package Control 사용 시
 
-MIT License
+   - 패키지 컨트롤에서 폴더를 강제로 지울수 있음.
+   - Preferences -> Package Settings -> Package Control -> Settings - User 에 아래 내용 추가 "installed_packages": [ // 기존 패키지 목록 ... "SqlVariablesConverter" ],
