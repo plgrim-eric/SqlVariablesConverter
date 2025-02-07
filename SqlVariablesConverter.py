@@ -33,11 +33,24 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             declarations = '\n'.join(lines[:declaration_end])
             sql_content = '\n'.join(lines[declaration_end:])
             
-            # SQL 부분만 변환
+            # 주석 블록 (/* ... */) 내의 내용은 변환하지 않도록 처리
+            comment_re = re.compile(r'(/\*.*?\*/)', re.DOTALL)
+            parts = comment_re.split(sql_content)
+            new_sql_content_parts = []
+            for part in parts:
+                if comment_re.match(part):
+                    # 주석 블록은 그대로 둠
+                    new_sql_content_parts.append(part)
+                else:
+                    # 주석이 아닌 부분에 대해서만 변환 적용
+                    new_sql_content_parts.append(re.sub(pattern, replacement, part))
+            new_sql_content = ''.join(new_sql_content_parts)
+            
+            # 최종 컨텐츠 조합 (선언부 + SQL 내용)
             new_content = declarations
-            if declarations and sql_content.strip():  # SQL 내용이 있을 때만
+            if declarations and new_sql_content.strip():
                 new_content += '\n'  # 한 줄만 추가
-            new_content += re.sub(pattern, replacement, sql_content)
+            new_content += new_sql_content
             
         else:
             # #{변수명:VARCHAR} -> :변수명 변환
@@ -55,15 +68,29 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             
             sql_content = '\n'.join(lines[declaration_end:])
             
-            # 변수명 수집
-            variables = set(re.findall(pattern, sql_content))
+            # 주석 블록 보호: /* ... */ 내의 내용은 건드리지 않음
+            comment_re = re.compile(r'(/\*.*?\*/)', re.DOTALL)
+            parts = comment_re.split(sql_content)
+            
+            # 변수명 수집 (주석 제외)
+            non_comment_text = ''.join(part for part in parts if not comment_re.match(part))
+            variables = set(re.findall(pattern, non_comment_text))
+            
+            # 주석 블록 내에서는 변환하지 않고, 나머지 부분에 대해서만 변환 적용
+            new_sql_content_parts = []
+            for part in parts:
+                if comment_re.match(part):
+                    new_sql_content_parts.append(part)
+                else:
+                    new_sql_content_parts.append(re.sub(pattern, replacement, part))
+            new_sql_content = ''.join(new_sql_content_parts)
             
             # 변수 선언문 생성
             if variables:
                 var_declarations = '\n'.join(':{0} = NULL'.format(var) for var in sorted(variables))
-                new_content = var_declarations + '\n\n' + re.sub(pattern, replacement, sql_content)
+                new_content = var_declarations + '\n\n' + new_sql_content
             else:
-                new_content = re.sub(pattern, replacement, sql_content)
+                new_content = new_sql_content
         
         # 변환된 내용으로 교체
         self.view.replace(edit, region, new_content)
