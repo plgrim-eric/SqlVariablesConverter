@@ -54,7 +54,7 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             
         else:
             # #{변수명:VARCHAR} -> :변수명 변환
-            pattern = r'#\{(\w+):(VARCHAR|NUMBER)\}'
+            pattern = r'#\{(\w+):[VARCHAR|NUMERIC]\}'
             replacement = r':\1'
             
             # 기존 변수 선언부와 SQL 분리
