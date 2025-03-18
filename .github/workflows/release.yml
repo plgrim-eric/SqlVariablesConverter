@@ -27,6 +27,7 @@ jobs:
           cp sqlvariablesconverter.py build/
           cp Default.sublime-commands build/
           cp .no-sublime-package build/
+          cp package-metadata.json build/
           
           # Sublime Package 생성
           cd build
