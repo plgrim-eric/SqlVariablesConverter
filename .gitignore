@@ -1,16 +1,29 @@
-# Byte-compiled / optimized / DLL files
+# Sublime Text 관련 파일
+*.sublime-workspace
+*.sublime-project
+
+# 빌드 결과물
+*.sublime-package
+build/
+
+# Python 캐시 파일
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-
-# OS generated files
+# 시스템 파일
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Sublime Text specific files
-*.sublime-workspace 
+# 에디터 설정 파일
+.vscode/
+.idea/
+
+# 기타 임시 파일
+*.bak
+*.tmp
+
+# Distribution / packaging
+dist/
+*.egg-info/ 

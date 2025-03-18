@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Sublime Package
+        run: |
+          # 버전 정보 추출
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Creating package version $VERSION"
+          
+          # 패키지 디렉토리 생성
+          mkdir -p build
+          
+          # 필요한 파일들 복사
+          cp SqlVariablesConverter.py build/
+          cp Default.sublime-commands build/
+          cp .no-sublime-package build/
+          
+          # Sublime Package 생성
+          cd build
+          zip -r ../SqlVariablesConverter.sublime-package *
+          cd ..
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: SqlVariablesConverter ${{ github.ref_name }}
+          files: SqlVariablesConverter.sublime-package
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
