@@ -1,14 +1,14 @@
 [
     {
         "caption": "SQL Variables: Convert to Mybatis",
-        "command": "sqlvariablesconverter",
+        "command": "sql_variables_converter",
         "args": {
             "to_type": "mybatis"
         }
     },
     {
         "caption": "SQL Variables: Convert to SQL",
-        "command": "sqlvariablesconverter",
+        "command": "sql_variables_converter",
         "args": {
             "to_type": "sql"
         }
