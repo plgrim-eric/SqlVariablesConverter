@@ -19,8 +19,8 @@ jobs:
       - name: Create Sublime Package
         run: |
           # 버전 정보 추출
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "Creating package version $VERSION"
+          #VERSION=${GITHUB_REF#refs/tags/v}
+          #echo "Creating package version $VERSION"
           
           # 패키지 디렉토리 생성
           mkdir -p build
