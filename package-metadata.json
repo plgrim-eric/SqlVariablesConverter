@@ -1,9 +1,10 @@
 {
-  "name": "SqlVariablesConverter",
+  "name": "sql_variables_converter",
   "description": "SQL 변수를 Mybatis 형식과 오라클 형식 간에 변환하는 도구",
   "author": "SQL Variables Converter",
   "version": "1.0.0",
   "url": "https://github.com/plgrim-eric/SqlVariablesConverter",
   "platforms": ["*"],
-  "sublime_text": "*"
+  "sublime_text": "*",
+  "dependencies": []
 } 
