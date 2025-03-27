@@ -2,8 +2,10 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+    #tags:
+    #  - 'v*'
 
 jobs:
   build:
@@ -24,6 +26,7 @@ jobs:
           mkdir -p build
           
           # 필요한 파일들 복사
+          cp __init__.py build/
           cp sqlvariablesconverter.py build/
           cp Default.sublime-commands build/
           cp .no-sublime-package build/
@@ -38,7 +41,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          name: SqlVariablesConverter ${{ github.ref_name }}
+          name: SqlVariablesConverter
           files: SqlVariablesConverter.sublime-package
           draft: false
           prerelease: false
