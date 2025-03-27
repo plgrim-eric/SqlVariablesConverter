@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    #tags:
-    #  - 'v*'
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -16,11 +16,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set version
+        id: set_version
+        run: |
+          # 태그가 있으면 태그를, 없으면 short commit hash 사용
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=$(git rev-parse --short HEAD)
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Creating package version $VERSION"
+
       - name: Create Sublime Package
         run: |
-          # 버전 정보 추출
-          #VERSION=${GITHUB_REF#refs/tags/v}
-          #echo "Creating package version $VERSION"
           
           # 패키지 디렉토리 생성
           mkdir -p build
@@ -41,7 +50,8 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          name: SqlVariablesConverter
+          name: SqlVariablesConverter ${{ env.VERSION }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('release-{0}', env.VERSION) }}
           files: SqlVariablesConverter.sublime-package
           draft: false
           prerelease: false
