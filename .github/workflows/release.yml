@@ -26,11 +26,9 @@ jobs:
             VERSION=$(git rev-parse --short HEAD)
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Creating package version $VERSION"
 
       - name: Create Sublime Package
         run: |
-          
           # 패키지 디렉토리 생성
           mkdir -p build
           
@@ -38,7 +36,7 @@ jobs:
           cp __init__.py build/
           cp sqlvariablesconverter.py build/
           cp Default.sublime-commands build/
-          cp ./.no-sublime-package build/
+          cp .no-sublime-package build/
           cp package-metadata.json build/
           
           # Sublime Package 생성

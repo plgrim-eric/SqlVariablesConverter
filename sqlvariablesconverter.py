@@ -4,8 +4,6 @@ import re
 
 class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
     def run(self, edit, to_type="mybatis"):
-        print("Command started with to_type:", to_type)  # 디버깅 로그
-        
         # 선택 영역 또는 전체 영역 
         selections = self.view.sel()
         if len(selections) == 1 and selections[0].empty():
@@ -16,14 +14,11 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             region = selections[0]
             
         content = self.view.substr(region)
-        print("Content length:", len(content))  # 디버깅 로그
         
         if to_type == "mybatis":
-            print("Converting to MyBatis format")  # 디버깅 로그
             # 이미 mybatis 형식인지 확인
             mybatis_pattern = r'#\{(\w+):(VARCHAR|NUMERIC)\}'
             if re.search(mybatis_pattern, content):
-                print("Already in MyBatis format")  # 디버깅 로그
                 # 이미 변환된 형식이 있더라도 계속 진행
                 # return 제거
                 
@@ -72,14 +67,11 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             
             # 변경사항 적용
             self.view.replace(edit, region, new_content)
-            print("Conversion completed")  # 디버깅 로그
             
         elif to_type == "sql":
-            print("Converting to SQL format")  # 디버깅 로그
             # 이미 SQL 형식인지 확인
             sql_pattern = r':(\w+)'
             if re.search(sql_pattern, content):
-                print("Already in SQL format")  # 디버깅 로그
                 # 이미 변환된 형식이 있더라도 계속 진행
                 # return 제거
                 
@@ -128,7 +120,6 @@ class SqlVariablesConverterCommand(sublime_plugin.TextCommand):
             
             # 변경사항 적용
             self.view.replace(edit, region, new_content)
-            print("Conversion completed")  # 디버깅 로그
 
 def plugin_loaded():
     pass
